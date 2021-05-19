@@ -1,0 +1,42 @@
+@import "colors";
+
+// .timer {
+//   border: solid red;
+//   width: 100%;
+//   background-color: $tomoatoRed;
+
+//   header {
+//     display: flex;
+//     justify-content: flex-end;
+//   }
+
+//   button {
+//     font-size: 20px;
+//     margin: 10px;
+//     padding: 0;
+//     border: none;
+//     background: none;
+//     cursor: pointer;
+//   }
+// }
+
+.countDown {
+  margin: 0px;
+  padding: 0px;
+  border: solid yellow;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  h1 {
+    margin: 10px;
+    padding: 20px;
+    font-size: 80px;
+    border: solid black;
+    text-align: center;
+  }
+  button {
+    border: solid yellow;
+  }
+}
