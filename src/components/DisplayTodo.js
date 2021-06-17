@@ -1,12 +1,18 @@
 import { StyledTodo } from "./styles/StyledTodo";
 
-const DisplayTodo = ({ todo, id, status, handleDeleteTodo }) => {
-  console.log("from todo");
-  console.log(todo);
+const DisplayTodo = ({
+  todo,
+  id,
+  status,
+  handleDeleteTodo,
+  handleTodoStatus,
+}) => {
+  // console.log("from todo");
+  // console.log(todo);
 
   return (
     <div>
-      <StyledTodo>
+      <StyledTodo onClick={() => handleTodoStatus(id)}>
         <span>{`Todo: ${id} ${todo}`}</span>
         <span>
           {`${status}`}

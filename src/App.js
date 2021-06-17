@@ -4,6 +4,9 @@ import DisplayTodos from "./components/DisplayTodos";
 import "./App.scss";
 import DisplayAddTodo from "./components/DisplayAddTodo";
 import todoService from "./services/todo";
+import Login from "./components/Login";
+import loginService from "./services/login";
+import Togglable from "./components/Togglable";
 
 function App() {
   const [number, setNumber] = useState(1);
@@ -14,26 +17,53 @@ function App() {
   const [isActive, setIsActive] = useState(false);
   const [counter, setCounter] = useState(1500);
 
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
+
   const [todos, setTodos] = useState([
-    {
-      id: 1,
-      todo: "finish Backend",
-      status: false,
-    },
-    {
-      id: 2,
-      todo: "Make a cup of tea",
-      status: true,
-    },
+    // {
+    //   id: 1,
+    //   todo: "finish Backend",
+    //   status: false,
+    // },
+    // {
+    //   id: 2,
+    //   todo: "Make a cup of tea",
+    //   status: true,
+    // },
   ]);
   const [newTodo, setNewTodo] = useState("");
 
-  // useEffect to get people from server
   useEffect(() => {
-    todoService.getAll().then((initalTodo) => {
-      setTodos(initalTodo);
-    });
+    const loggedUserJSON = window.localStorage.getItem("loggedTodoAppUser");
+    console.log("loggedUser local stroage", loggedUserJSON);
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      todoService.setToken(user.token);
+    }
   }, []);
+
+  // useEffect to get todo from server
+  useEffect(() => {
+    if (user != null) {
+      (async function getAll() {
+        console.log("get todos from server");
+        const getTodos = await todoService.getAll();
+        getTodos ? setTodos(getTodos) : setTodos([{}]);
+      })();
+    } else {
+      return null;
+    }
+
+    // console.log("triggered");
+    // todoService.getAll().then((initalTodo) => {
+    //   initalTodo ? setTodos(initalTodo) : setTodos([{}]);
+    // });
+  }, [user]);
 
   useEffect(() => {
     let intervalId;
@@ -94,41 +124,118 @@ function App() {
     pomodoroState ? setPomodoroState(false) : setPomodoroState(true);
   };
 
-  const addTodo = (e) => {
+  const addTodo = async (e) => {
     e.preventDefault();
+    if (!user) {
+      alert("You must login to create a todo");
+      return null;
+    }
 
     const todoObject = {
-      id: todos.length + 1,
+      // id: todos.length + 1,
       todo: newTodo,
       status: false,
     };
-    todoService
-      .create(todoObject)
-      .then((returnedTodo) => {
-        setTodos(todos.concat(returnedTodo));
-        setNewTodo("");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const returnedTodo = await todoService.create(todoObject);
+      setTodos(todos.concat(returnedTodo));
+      setNewTodo("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleTodoStatus = async (id) => {
+    console.log(id);
+    try {
+      const todo = todos.find((todo) => todo.id.toString() === id);
+      todo.status ? (todo.status = false) : (todo.status = true);
+      console.log("update todo", todo);
+      const updatedTodo = await todoService.updateTodo(id, todo);
+      setTodos(todos.map((todo) => (todo.id !== id ? todo : updatedTodo)));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleNewTodo = (e) => {
     setNewTodo(e.target.value);
   };
 
-  const handleDeleteTodo = (e) => {
-    console.log("delete");
-    console.log(e.target.value);
-    if (window.confirm(`Are you sure you want to delete ?`)) {
-      todoService.deleteTodo(e.target.value);
-      setTodos(todos.filter((todo) => todo.id.toString() !== e.target.value));
+  const handleDeleteTodo = async (e) => {
+    try {
+      if (window.confirm(`Are you sure you want to delete ?`)) {
+        console.log(e.target.value);
+        await todoService.deleteTodo(e.target.value.toString());
+        setTodos(todos.filter((todo) => todo.id.toString() !== e.target.value));
+      }
+    } catch (err) {
+      console.log(err);
     }
-    console.log(todos);
+
+    // console.log("delete");
+    // console.log(e.target.value);
+    // if (window.confirm(`Are you sure you want to delete ?`)) {
+    //   todoService.deleteTodo(e.target.value);
+    //   setTodos(todos.filter((todo) => todo.id.toString() !== e.target.value));
+    // }
+    // console.log(todos);
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log("Loggin in with", username, password);
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      });
+
+      window.localStorage.setItem("loggedTodoAppUser", JSON.stringify(user));
+
+      todoService.setToken(user.token);
+      setUser(user);
+      setUsername("");
+      setPassword("");
+      // console.log("logged in", user);
+    } catch (exception) {
+      setErrorMessage("Wrong credentials");
+      console.log("Wrong Credentials");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+
+  const handleLogout = () => {
+    console.log("handleLogout");
+    window.localStorage.clear();
+    setTodos([]);
+    setUser(null);
+    console.log("handle logout", todos);
+  };
+
+  const handleSignUp = async () => {
+    try {
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <div className="App">
+      <Togglable user={user} buttonLabel="login">
+        <Login
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          handleLogin={handleLogin}
+          handleLogout={handleLogout}
+          handleSignUp={handleSignUp}
+          user={user}
+        />
+      </Togglable>
+
       <Timer
         state={pomodoroState}
         number={number}
@@ -143,7 +250,11 @@ function App() {
         newTodo={newTodo}
         addTodo={addTodo}
       ></DisplayAddTodo>
-      <DisplayTodos todos={todos} handleDeleteTodo={handleDeleteTodo} />
+      <DisplayTodos
+        todos={todos}
+        handleDeleteTodo={handleDeleteTodo}
+        handleTodoStatus={handleTodoStatus}
+      />
     </div>
   );
 }

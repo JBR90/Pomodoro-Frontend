@@ -1,6 +1,6 @@
 import DisplayTodo from "./DisplayTodo";
 import { StyledTodos } from "./styles/StyledTodos";
-const DisplayTodos = ({ todos, handleDeleteTodo }) => {
+const DisplayTodos = ({ todos, handleDeleteTodo, handleTodoStatus }) => {
   console.log(todos);
   return (
     <StyledTodos>
@@ -11,6 +11,7 @@ const DisplayTodos = ({ todos, handleDeleteTodo }) => {
           status={todo.status}
           id={todo.id}
           handleDeleteTodo={handleDeleteTodo}
+          handleTodoStatus={handleTodoStatus}
         />
       ))}
     </StyledTodos>
