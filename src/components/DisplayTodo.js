@@ -12,10 +12,10 @@ const DisplayTodo = ({
 
   return (
     <div>
-      <StyledTodo onClick={() => handleTodoStatus(id)}>
-        <span>{`Todo: ${id} ${todo}`}</span>
+      <StyledTodo status={status} onClick={() => handleTodoStatus(id)}>
+        <span className="todo">{`🍅 : ${todo}`}</span>
         <span>
-          {`${status}`}
+          {/* {`${status}`} */}
           <button value={id} onClick={handleDeleteTodo}>
             x
           </button>{" "}

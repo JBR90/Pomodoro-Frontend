@@ -4,7 +4,7 @@ const DisplayAddTodo = ({ handleNewTodo, newTodo, addTodo }) => {
   return (
     <StyledAddTodo>
       <form onSubmit={addTodo}>
-        <button type="submit">Add</button>
+        <button type="submit">Add a Todo</button>
         <input type="text" value={newTodo} onChange={handleNewTodo} />
       </form>
     </StyledAddTodo>

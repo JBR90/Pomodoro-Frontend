@@ -7,6 +7,7 @@ import todoService from "./services/todo";
 import Login from "./components/Login";
 import loginService from "./services/login";
 import Togglable from "./components/Togglable";
+import Header from "./components/Header";
 
 function App() {
   const [number, setNumber] = useState(1);
@@ -103,6 +104,16 @@ function App() {
 
   const handleTimeStopButton = () => {
     setIsActive(!isActive);
+  };
+
+  const handleResetTimer = (e) => {
+    console.log(e.target);
+    // e.target.style.width = "20px";
+    setIsActive(false);
+    setCounter(1500);
+    setMinute("25");
+    setSecond("00");
+    setNumber(1);
   };
 
   const handleClick = (e) => {
@@ -223,7 +234,18 @@ function App() {
 
   return (
     <div className="App">
-      <Togglable user={user} buttonLabel="login">
+      <Header
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+        handleLogin={handleLogin}
+        handleLogout={handleLogout}
+        handleSignUp={handleSignUp}
+        user={user}
+        handleResetTimer={handleResetTimer}
+      />
+      {/* <Togglable user={user} buttonLabel="login">
         <Login
           username={username}
           setUsername={setUsername}
@@ -234,7 +256,7 @@ function App() {
           handleSignUp={handleSignUp}
           user={user}
         />
-      </Togglable>
+      </Togglable> */}
 
       <Timer
         state={pomodoroState}
