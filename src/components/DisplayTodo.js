@@ -17,7 +17,7 @@ const DisplayTodo = ({
         <span>
           {/* {`${status}`} */}
           <button value={id} onClick={handleDeleteTodo}>
-            x
+            ❌
           </button>{" "}
         </span>
       </StyledTodo>

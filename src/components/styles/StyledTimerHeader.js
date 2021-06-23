@@ -6,7 +6,11 @@ export const StyledTimerHeader = styled.div`
 
   header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+  }
+  h3 {
+    margin: 20px;
   }
 
   button {

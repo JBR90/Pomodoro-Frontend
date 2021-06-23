@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Timer from "./components/Timer";
 import DisplayTodos from "./components/DisplayTodos";
 import "./App.scss";
@@ -6,6 +6,7 @@ import DisplayAddTodo from "./components/DisplayAddTodo";
 import todoService from "./services/todo";
 import Login from "./components/Login";
 import loginService from "./services/login";
+import userService from "./services/users";
 import Togglable from "./components/Togglable";
 import Header from "./components/Header";
 
@@ -18,11 +19,12 @@ function App() {
   const [isActive, setIsActive] = useState(false);
   const [counter, setCounter] = useState(1500);
 
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [message, setMessage] = useState(null);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [loginVisibility, setLoginVisibility] = useState(false);
 
   const [todos, setTodos] = useState([
     // {
@@ -37,6 +39,8 @@ function App() {
     // },
   ]);
   const [newTodo, setNewTodo] = useState("");
+
+  const loginRef = useRef();
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedTodoAppUser");
@@ -100,6 +104,13 @@ function App() {
     setMinute("25");
     setSecond("00");
     setIsActive(true);
+  };
+
+  const handleMessage = (message) => {
+    setMessage(message);
+    setTimeout(() => {
+      setMessage(null);
+    }, 5000);
   };
 
   const handleTimeStopButton = () => {
@@ -209,11 +220,12 @@ function App() {
       setPassword("");
       // console.log("logged in", user);
     } catch (exception) {
-      setErrorMessage("Wrong credentials");
+      handleMessage("Wrong credentials");
+      // setMessage("Wrong credentials");
       console.log("Wrong Credentials");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      // setTimeout(() => {
+      //   setMessage(null);
+      // }, 5000);
     }
   };
 
@@ -225,9 +237,17 @@ function App() {
     console.log("handle logout", todos);
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     try {
+      const user = await userService.signup({
+        username,
+        password,
+      });
+      handleMessage(`${user.username}, your account is created`);
+      console.log(user);
     } catch (err) {
+      handleMessage("Signup failed - try again");
       console.log(err);
     }
   };
@@ -244,6 +264,8 @@ function App() {
         handleSignUp={handleSignUp}
         user={user}
         handleResetTimer={handleResetTimer}
+        setLoginVisibility={setLoginVisibility}
+        message={message}
       />
       {/* <Togglable user={user} buttonLabel="login">
         <Login

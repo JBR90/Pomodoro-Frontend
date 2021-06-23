@@ -3,21 +3,23 @@ import { colors } from "./colours";
 import { Flex } from "./Mixins";
 
 export const StyledLogin = styled.div`
-  /* position: fixed; */
-  /* background-color: ${(props) => colors.tomato}; */
-  /* top: 15px;
-  right: 10px; */
-  width: 200px;
+  position: fixed;
+  background-color: ${(props) => colors.tomato};
+  right: 10px;
+  top: 130px;
+  /* width: 200px; */
   border: solid black thin;
   border-radius: 10px;
-  padding: 0px 15px 10px 15px;
+  padding: 10px 15px 10px 15px;
 
   input {
     text-align: center;
     width: 100%;
+    height: 25px;
   }
   ::placeholder {
     text-align: center;
+
     color: blue;
     opacity: 1; /* Firefox */
   }

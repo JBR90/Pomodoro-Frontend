@@ -11,6 +11,7 @@ const Login = ({
   handleLogout,
   handleSignUp,
   user,
+  message,
 }) => {
   const node = useRef();
 
@@ -40,9 +41,6 @@ const Login = ({
 
   const loginForm = () => (
     <form ref={node} onSubmit={handleLogin}>
-      <button className="cancel-btn" onClick={handleSignUp}>
-        x
-      </button>
       <div className="auth">
         <input
           type="text"
@@ -63,14 +61,15 @@ const Login = ({
       </div>
       <div className="login-btns">
         <button type="submit">Login</button>
-        <button onClick={handleSignUp}>Sign Up</button>
+        <button onClick={(e) => handleSignUp(e)}>Sign Up</button>
       </div>
+      <span className="msg">{message}</span>
     </form>
   );
 
   const loggedIn = () => (
     <div>
-      <h1>{`Hi ${user.username}`}</h1>
+      <p>{`Hi ${user.username}`}</p>
       <button onClick={handleLogout}>Logout</button>
     </div>
   );

@@ -8,7 +8,7 @@ export const StyledHeader = styled.div`
   .container {
     display: flex;
     flex-direction: column;
-    /* margin: 10px; */
+    margin: 10px;
 
     justify-content: center;
     align-items: center;
@@ -18,12 +18,14 @@ export const StyledHeader = styled.div`
       margin: 10px;
     } */
     p {
-      padding: 8px;
+      text-align: center;
+      /* padding: 8px; */
       font-size: 15px;
     }
   }
   h1 {
-    /* padding-top: 30px; */
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    padding-top: 10px;
     /* border: solid black; */
     font-size: 60px;
     text-align: center;
