@@ -26,22 +26,12 @@ function App() {
   const [user, setUser] = useState(null);
   const [loginVisibility, setLoginVisibility] = useState(false);
 
-  const [todos, setTodos] = useState([
-    // {
-    //   id: 1,
-    //   todo: "finish Backend",
-    //   status: false,
-    // },
-    // {
-    //   id: 2,
-    //   todo: "Make a cup of tea",
-    //   status: true,
-    // },
-  ]);
+  const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
   const loginRef = useRef();
 
+  // Save user to local storage
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedTodoAppUser");
     console.log("loggedUser local stroage", loggedUserJSON);
@@ -63,11 +53,6 @@ function App() {
     } else {
       return null;
     }
-
-    // console.log("triggered");
-    // todoService.getAll().then((initalTodo) => {
-    //   initalTodo ? setTodos(initalTodo) : setTodos([{}]);
-    // });
   }, [user]);
 
   useEffect(() => {
@@ -267,18 +252,6 @@ function App() {
         setLoginVisibility={setLoginVisibility}
         message={message}
       />
-      {/* <Togglable user={user} buttonLabel="login">
-        <Login
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-          handleLogin={handleLogin}
-          handleLogout={handleLogout}
-          handleSignUp={handleSignUp}
-          user={user}
-        />
-      </Togglable> */}
 
       <Timer
         state={pomodoroState}

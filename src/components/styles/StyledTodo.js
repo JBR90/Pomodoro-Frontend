@@ -11,7 +11,8 @@ export const StyledTodo = styled.div`
   margin: auto;
   margin-bottom: 10px;
   width: 60%;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 
   background-color: ${(props) =>
     props.status ? colors.break : colors.tomatoLight};
